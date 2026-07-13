@@ -42,7 +42,11 @@ function App() {
     setStatus({ type: 'idle', message: '' })
 
     try {
-      if (!isSupabaseConfigured) throw new Error('Supabase environment variables are missing')
+      if (!isSupabaseConfigured) {
+        setStatus({ type: 'error', message: 'El sistema de contacto no está disponible en este momento. Por favor, contáctame directamente por email o teléfono.' })
+        return
+      }
+      if (!supabase) throw new Error('Supabase client is not initialized')
       const { error } = await supabase.from('contact_requests').insert({
         name: String(data.get('name')).trim(),
         company: String(data.get('company')).trim() || null,
